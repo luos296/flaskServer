@@ -10,17 +10,19 @@ from utils.jenkins_tool import ExecuteTools
 
 class TaskServer(Resource):
     def post(self):
-        nodeids = request.json
-        remark = ' '.join(nodeids.get('nodeids'))
+        nodeids = [i["nodeid"] for i in request.json["nodeids"]]
+        remark = ' '.join(nodeids)
         report = ExecuteTools.invoke(remark)
         task = Task(remark=remark, report=report)
         db.session.add(task)
         db.session.commit()
+        db.session.close()
         return {"error": 0, "msg": "post success", "data": {"remark": remark, "report": report}}
 
     def get(self):
-        id = request.args.get('id')
-        task_data = Task.query.filter_by(id=id).first()
-        data = task_data.as_dict()
+        task_data = Task.query.all()
+        data = [i.as_dict() for i in task_data]
         app.logger.info(data)
+        db.session.close()
         return {"error": 0, "msg": "post success", "data": data}
+

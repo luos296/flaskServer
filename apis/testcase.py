@@ -17,6 +17,7 @@ class TestCaseServer(Resource):
             case_data = TestCase.query.all()
             data = [i.as_dict() for i in case_data]
         app.logger.info(data)
+        db.session.close()
         return {"error": 0, "msg": "get success", "data": data}
 
     def post(self):
@@ -25,6 +26,7 @@ class TestCaseServer(Resource):
         testcase = TestCase(**case_data)
         db.session.add(testcase)
         db.session.commit()
+        db.session.close()
         return {"error": 0, "msg": "post success"}
 
     def put(self):
@@ -32,6 +34,7 @@ class TestCaseServer(Resource):
         case_data = TestCase.query.filter_by(id=case_id).update(request.json)
         app.logger.info(case_data)
         db.session.commit()
+        db.session.close()
         return {"error": 0, "msg": "put success", 'data': request.json}
 
     def delete(self):
@@ -41,4 +44,5 @@ class TestCaseServer(Resource):
         else:
             case_data = TestCase.query.filter_by(id=case_id).delete()
             db.session.commit()
+            db.session.close()
             return {"error": 0, "msg": "delete success", "data": case_data}
