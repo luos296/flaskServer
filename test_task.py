@@ -10,7 +10,7 @@ class TestTask:
         self.base_url = 'http://127.0.0.1:5000/task'
 
     def test_post(self):
-        data = {'remark': '测试数据', 'report': 'qqq'}
+        data = {'nodeids': ['test_add.py']}
         r = requests.post(self.base_url, json=data)
         print(r.json())
         assert r.status_code == 200
