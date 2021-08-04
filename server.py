@@ -23,10 +23,14 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 
-# start
-if __name__ == "__main__":
-    db.create_all()
-    db.session.commit()
+def add_router():
     from apis.testcase import TestCaseServer
     api.add_resource(TestCaseServer, '/testcase')
+    from apis.task import TaskServer
+    api.add_resource(TaskServer, '/task')
+
+
+# start
+if __name__ == "__main__":
+    add_router()
     app.run(debug=True)

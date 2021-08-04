@@ -40,4 +40,3 @@ class TestCase:
         r = requests.delete(self.base_url, params={'id': 3})
         print(r.json())
         assert r.status_code == 200
-
